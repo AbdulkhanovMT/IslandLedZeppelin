@@ -38,22 +38,43 @@ public class Cell {
     public void addAnimalsInCell(){
         List<TypeOfAnimal> types = Arrays.stream(TypeOfAnimal.values()).collect(Collectors.toList());
         int randomCountOfCycles = defineCountOfTypesOfAnimalInCell(types);
+        int randomMaxCountInCell = 0;
         for (int i = 0; i < randomCountOfCycles; i++) {
             TypeOfAnimal randomType = types.get(Randomiser.getRandomCount(0, types.size()));
             Class<? extends Animal> randomClass = (Class<? extends Animal>) AnimalMap.ANIMALS.get(randomType);
-            int randomMaxCountInCell = 0;
             try {
                 Limit randomLimit = randomClass.getConstructor().newInstance().readConfig();
                 randomMaxCountInCell = Integer.parseInt(randomLimit.getMaxCountInCell());
-                ArrayDeque<Animal> randomAnimalDeque = new ArrayDeque<>();
-                fillAnimalDeque(randomMaxCountInCell, randomLimit, randomAnimalDeque, randomClass);
+                int randomCount = Randomiser.getRandomCount(0, randomMaxCountInCell);
+                if(residentsInCell.containsKey(randomType)){
+                    ArrayDeque<Animal> residentsDeque = residentsInCell.get(randomType);
+                    int countInCell = residentsDeque.size();
+                    if(randomMaxCountInCell==countInCell){
+                        continue;
+                    }else if(countInCell<randomMaxCountInCell){
+                        int vacantPlaces = randomMaxCountInCell-countInCell;
+                        int freePlaces = Math.min(randomCount, vacantPlaces);
+                        mergeDeque(freePlaces, randomLimit, randomClass, residentsDeque);
+                    }
+                } else{
+                    ArrayDeque<Animal> randomAnimalDeque = fillAnimalDeque(randomCount, randomLimit, randomClass);
+                    residentsInCell.put(randomType, randomAnimalDeque);
+                }
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
-
-            Set<TypeOfAnimal> keySet = AnimalMap.ANIMALS.keySet();
-            Set<Map.Entry<TypeOfAnimal, Class<?>>> entrySet = AnimalMap.ANIMALS.entrySet();
         }
+    }
+
+    private void mergeDeque(int freePlaces, Limit randomLimit, Class<? extends Animal> randomClass, ArrayDeque<Animal> residentsDeque) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        ArrayDeque<Animal> newDeque = residentsDeque;
+        TypeOfAnimal randomType = TypeOfAnimal.valueOf(randomClass.getName());
+        for (int j = 0; j < freePlaces; j++) {
+            Animal randomAnimal = animalCreator.create(randomClass);
+            newDeque.add(randomAnimal);
+            System.out.println(randomAnimal.getIcon());
+        }
+        residentsInCell.put(randomType, newDeque);
     }
 
     private static int defineCountOfTypesOfAnimalInCell(List<TypeOfAnimal> types) {
@@ -61,17 +82,14 @@ public class Cell {
         return randomCountOfCycles;
     }
 
-    private static void fillAnimalDeque(int randomMaxCountInCell, Limit randomLimit, ArrayDeque<Animal> randomAnimalDeque, Class<? extends Animal> randomClass) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        for (int j = 0; j < randomMaxCountInCell; j++) {
-            double maxWeight = Double.parseDouble(randomLimit.getMaxWeight());
-            double weight = Randomiser.getRandomWeight(maxWeight/1.5, maxWeight);
-            boolean gender = Randomiser.getRandomGender();
-            Animal randomAnimal = randomClass
-                    .getConstructor(double.class, boolean.class, Limit.class)
-                    .newInstance(weight, gender, randomLimit);
+    private ArrayDeque<Animal> fillAnimalDeque(int randomCount, Limit randomLimit, Class<? extends Animal> randomClass) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        ArrayDeque<Animal> randomAnimalDeque = new ArrayDeque<>();
+        for (int j = 0; j < randomCount; j++) {
+            Animal randomAnimal = animalCreator.create(randomClass);
             randomAnimalDeque.add(randomAnimal);
             System.out.println(randomAnimal.getIcon());
         }
+        return randomAnimalDeque;
     }
 
 
