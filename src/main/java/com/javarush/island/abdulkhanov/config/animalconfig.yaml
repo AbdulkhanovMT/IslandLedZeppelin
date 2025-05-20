@@ -1,0 +1,7 @@
+---
+foodMap:
+  Wolf:
+    Rabbit: 60
+  Rabbit:
+    Plant: 100
+---
