@@ -5,6 +5,7 @@ import com.javarush.island.abdulkhanov.entity.Entity;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,11 +46,12 @@ public class Wolf extends Predator{
 
     public Limit readConfig(){
         String statsPath = this.getStatsPath();
+        File file = new File(statsPath);
         try {
             String yamlConfig = Files.readString(Path.of(statsPath));
-            Limit limit = super.getAnimalLimit();
-            limit = getMapper().readValue(yamlConfig, Limit.class);
+            Limit limit = getMapper().readValue(file, Limit.class);
             return limit;
+
         } catch (IOException e) {
             e.printStackTrace();
         }

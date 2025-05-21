@@ -11,15 +11,20 @@ import com.javarush.island.abdulkhanov.util.Randomiser;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class Cell {
-    private HashMap<TypeOfAnimal, ArrayDeque<Animal>> residentsInCell = new HashMap<>();
-    private ArrayList<Plant> listOfPlants = new ArrayList<>();
-    private CreatorOfPlant plantCreator = new CreatorOfPlant();
-    private CreatorOfAnimal animalCreator = new CreatorOfAnimal();
 
-    public HashMap<TypeOfAnimal, ArrayDeque<Animal>> getResidentsInCell() {
+    private final ConcurrentHashMap<TypeOfAnimal, ArrayDeque<Animal>> residentsInCell = new ConcurrentHashMap<>();
+    private final ArrayList<Plant> listOfPlants = new ArrayList<>();
+    private final CreatorOfPlant plantCreator = new CreatorOfPlant();
+    private final CreatorOfAnimal animalCreator = new CreatorOfAnimal();
+
+    public Cell() {
+    }
+
+    public ConcurrentHashMap<TypeOfAnimal, ArrayDeque<Animal>> getResidentsInCell() {
         return residentsInCell;
     }
 
@@ -49,9 +54,8 @@ public class Cell {
                 if(residentsInCell.containsKey(randomType)){
                     ArrayDeque<Animal> residentsDeque = residentsInCell.get(randomType);
                     int countInCell = residentsDeque.size();
-                    if(randomMaxCountInCell==countInCell){
-                        continue;
-                    }else if(countInCell<randomMaxCountInCell){
+                    if(randomMaxCountInCell==countInCell) continue;
+                    if(countInCell<randomMaxCountInCell){
                         int vacantPlaces = randomMaxCountInCell-countInCell;
                         int freePlaces = Math.min(randomCount, vacantPlaces);
                         mergeDeque(freePlaces, randomLimit, randomClass, residentsDeque);
@@ -78,7 +82,7 @@ public class Cell {
     }
 
     private static int defineCountOfTypesOfAnimalInCell(List<TypeOfAnimal> types) {
-        int randomCountOfCycles = Randomiser.getRandomCount(0, types.size());
+        int randomCountOfCycles = Randomiser.getRandomCount(1, types.size()+1);
         return randomCountOfCycles;
     }
 
