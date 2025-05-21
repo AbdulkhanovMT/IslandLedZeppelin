@@ -72,7 +72,7 @@ public class Cell {
 
     private void mergeDeque(int freePlaces, Limit randomLimit, Class<? extends Animal> randomClass, ArrayDeque<Animal> residentsDeque) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         ArrayDeque<Animal> newDeque = residentsDeque;
-        TypeOfAnimal randomType = TypeOfAnimal.valueOf(randomClass.getName());
+        TypeOfAnimal randomType = TypeOfAnimal.valueOf(randomClass.getName().toUpperCase());
         for (int j = 0; j < freePlaces; j++) {
             Animal randomAnimal = animalCreator.create(randomClass);
             newDeque.add(randomAnimal);

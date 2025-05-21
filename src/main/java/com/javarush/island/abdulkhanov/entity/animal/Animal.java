@@ -8,6 +8,7 @@ import com.javarush.island.abdulkhanov.entity.ability.Moveable;
 import com.javarush.island.abdulkhanov.entity.ability.Reproducible;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,7 +37,19 @@ public abstract class Animal extends Entity implements Eating, Moveable, Reprodu
     }
 
 
-    public abstract Limit readConfig();
+    public Limit readConfig(){
+        String statsPath = this.getStatsPath();
+        File file = new File(statsPath);
+        try {
+            String yamlConfig = Files.readString(Path.of(statsPath));
+            Limit limit = getMapper().readValue(file, Limit.class);
+            return limit;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
 
     public boolean getGender() {
         return gender;
@@ -51,5 +64,7 @@ public abstract class Animal extends Entity implements Eating, Moveable, Reprodu
         return "Animal: " + this.getClass().getName();
     }
 
-    public abstract String getIcon();
+    public String getIcon(){
+        return icon;
+    };
 }

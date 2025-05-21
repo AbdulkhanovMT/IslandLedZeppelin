@@ -23,15 +23,9 @@ public class Rabbit extends Herbivore{
         super(weight, gender, animalLimit);
     }
 
-
-
     @Override
     public boolean eat(Entity plant) {
         return false;
-    }
-
-    public ObjectMapper getMapper(){
-        return super.getMapper();
     }
 
     @Override
@@ -48,22 +42,4 @@ public class Rabbit extends Herbivore{
         return statsPath;
     }
 
-    public Limit readConfig(){
-        String statsPath = this.getStatsPath();
-        File file = new File(statsPath);
-        try {
-            String yamlConfig = Files.readString(Path.of(statsPath));
-            Limit limit = getMapper().readValue(file, Limit.class);
-            return limit;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public String getIcon() {
-        return icon;
-    }
 }

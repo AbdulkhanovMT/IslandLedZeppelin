@@ -18,10 +18,6 @@ public class Wolf extends Predator{
         return statsPath;
     }
 
-    public ObjectMapper getMapper(){
-        return super.getMapper();
-    }
-
     public Wolf() {
     }
 
@@ -44,22 +40,4 @@ public class Wolf extends Predator{
         return false;
     }
 
-    public Limit readConfig(){
-        String statsPath = this.getStatsPath();
-        File file = new File(statsPath);
-        try {
-            String yamlConfig = Files.readString(Path.of(statsPath));
-            Limit limit = getMapper().readValue(file, Limit.class);
-            return limit;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public String getIcon() {
-        return icon;
-    }
 }
