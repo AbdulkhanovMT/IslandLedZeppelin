@@ -2,15 +2,15 @@ package com.javarush.island.abdulkhanov.entity.herbivore;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 
-public class Rabbit extends Herbivore{
+public class Mouse extends Herbivore{
 
-    private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/herbivore/rabbit_limit.yaml";
+    private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/herbivore/mouse_limit.yaml";
     private final String icon = "\uD83D\uDC07";
 
-    public Rabbit() {
+    public Mouse() {
     }
 
-    public Rabbit(double weight, boolean gender, Limit animalLimit) {
+    public Mouse(double weight, boolean gender, Limit animalLimit) {
         super(weight, gender, animalLimit);
     }
 

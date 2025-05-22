@@ -1,8 +1,8 @@
 package com.javarush.island.abdulkhanov.entity.ability;
 
-import com.javarush.island.abdulkhanov.entity.Entity;
+import com.javarush.island.abdulkhanov.gamefield.Cell;
 
 public interface Eating {
 
-    boolean eat(Entity entity);
+    boolean eat(Cell cell);
 }

@@ -1,16 +1,9 @@
 package com.javarush.island.abdulkhanov.entity.limit;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.javarush.island.abdulkhanov.entity.animal.Animal;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @JsonPropertyOrder({"maxSpeed", "maxWeight", "maxCountInCell", "maxFood"})
-public class Limit<T extends Animal> {
+public class Limit {
 
     private String maxSpeed;
     private String maxWeight;
@@ -43,14 +36,4 @@ public class Limit<T extends Animal> {
         return maxFood;
     }
 
-//    public void readConfig(T animal){
-//        String statsPath = animal.getStatsPath();
-//        try {
-//            String yamlConfig = Files.readString(Path.of(statsPath));
-//            this = mapper.readValue(yamlConfig, Limit.class);
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

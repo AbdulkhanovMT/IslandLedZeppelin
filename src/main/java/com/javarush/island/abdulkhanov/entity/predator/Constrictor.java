@@ -2,15 +2,15 @@ package com.javarush.island.abdulkhanov.entity.predator;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 
-public class Wolf extends Predator{
+public class Constrictor extends Predator{
 
-    private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/predator/wolf_limit.yaml";
+    private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/predator/constrictor_limit.yaml";
     private final String icon = "\uD83D\uDC3A";
 
-    public Wolf() {
+    public Constrictor() {
     }
 
-    public Wolf(double weight, boolean gender, Limit animalLimit) {
+    public Constrictor(double weight, boolean gender, Limit animalLimit) {
         super(weight, gender, animalLimit);
     }
 

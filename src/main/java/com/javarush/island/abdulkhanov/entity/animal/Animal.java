@@ -1,27 +1,17 @@
 package com.javarush.island.abdulkhanov.entity.animal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.javarush.island.abdulkhanov.entity.Entity;
-import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.ability.Moveable;
 import com.javarush.island.abdulkhanov.entity.ability.Reproducible;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
+import com.javarush.island.abdulkhanov.gamefield.Cell;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-public abstract class Animal extends Entity implements Eating, Moveable, Reproducible {
+public abstract class Animal extends Entity implements Moveable, Reproducible {
     private int age;
     private boolean gender;
     private Limit animalLimit;
-    private final String icon = "ɸ";
-
-    public abstract String getStatsPath();
-
-    private final String statsPath = null;
+    private boolean isStarving;
 
     public Animal() {
     }
@@ -32,30 +22,33 @@ public abstract class Animal extends Entity implements Eating, Moveable, Reprodu
         this.animalLimit = animalLimit;
     }
 
+    public abstract String getStatsPath();
+
+    private final String statsPath = null;
+
+    public boolean isStarving() {
+        return isStarving;
+    }
+
+    @Override
+    public boolean move(Cell cell){
+        return false;
+    }
+
+    @Override
+    public boolean reproduce(Cell cell){
+        return false;
+    }
+
     public ObjectMapper getMapper(){
         return super.getMapper();
     }
-
-
-    public Limit readConfig(){
-        String statsPath = this.getStatsPath();
-        File file = new File(statsPath);
-        try {
-            String yamlConfig = Files.readString(Path.of(statsPath));
-            Limit limit = getMapper().readValue(file, Limit.class);
-            return limit;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    };
 
     public boolean getGender() {
         return gender;
     }
 
-    public Limit getAnimalLimit() {
+    public Limit getEntityLimit() {
         return animalLimit;
     }
 
@@ -64,7 +57,4 @@ public abstract class Animal extends Entity implements Eating, Moveable, Reprodu
         return "Animal: " + this.getClass().getName();
     }
 
-    public String getIcon(){
-        return icon;
-    };
 }

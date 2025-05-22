@@ -6,14 +6,17 @@ public class Randomiser {
     private Randomiser() {
     }
 
-    public static int getRandomCount(int min, int max){
-        return ThreadLocalRandom.current().nextInt(min,max);
+    public static int getRandomCount(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max);
     }
-    public static boolean getRandomGender(){
-        return getRandomCount(0,2)==0?true:false;
+
+    public static boolean getRandomGender() {
+        return getRandomCount(0, 2) == 0;
     }
 
     public static double getRandomWeight(double minWeight, double maxWeight) {
-        return ThreadLocalRandom.current().nextDouble(minWeight, maxWeight);
+        minWeight = Math.round(minWeight);
+        double randomWeight = 1.0 * ThreadLocalRandom.current().nextInt((int) minWeight, (int) maxWeight);
+        return (randomWeight < 1) ? 1.0 : randomWeight;
     }
 }

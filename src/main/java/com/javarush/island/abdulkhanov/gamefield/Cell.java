@@ -1,12 +1,10 @@
 package com.javarush.island.abdulkhanov.gamefield;
 
-import com.javarush.island.abdulkhanov.creator.CreatorOfAnimal;
-import com.javarush.island.abdulkhanov.creator.CreatorOfPlant;
-import com.javarush.island.abdulkhanov.entity.animal.Animal;
-import com.javarush.island.abdulkhanov.entity.animal.AnimalMap;
-import com.javarush.island.abdulkhanov.entity.animal.TypeOfAnimal;
+import com.javarush.island.abdulkhanov.creator.CreatorOfEntity;
+import com.javarush.island.abdulkhanov.entity.Entity;
+import com.javarush.island.abdulkhanov.entity.animal.EntityMap;
+import com.javarush.island.abdulkhanov.entity.animal.TypeOfEntity;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
-import com.javarush.island.abdulkhanov.entity.plant.Plant;
 import com.javarush.island.abdulkhanov.util.Randomiser;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,85 +14,68 @@ import java.util.stream.Collectors;
 
 public class Cell {
 
-    private final ConcurrentHashMap<TypeOfAnimal, ArrayDeque<Animal>> residentsInCell = new ConcurrentHashMap<>();
-    private final ArrayList<Plant> listOfPlants = new ArrayList<>();
-    private final CreatorOfPlant plantCreator = new CreatorOfPlant();
-    private final CreatorOfAnimal animalCreator = new CreatorOfAnimal();
+    private final ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> residentsInCell = new ConcurrentHashMap<>();
+    private final CreatorOfEntity entityCreator = new CreatorOfEntity();
 
     public Cell() {
     }
 
-    public ConcurrentHashMap<TypeOfAnimal, ArrayDeque<Animal>> getResidentsInCell() {
+    public ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> getResidentsInCell() {
         return residentsInCell;
     }
 
-    public ArrayList<Plant> getListOfPlants() {
-        return listOfPlants;
-    }
-
-    public void addPlantsInCell() {
-        int plantCount = Randomiser.getRandomCount(Plant.MIN_IN_CELL, Plant.MAX_IN_CELL);
-        Class<? extends Plant> plantClass = Plant.class;
-        for (int i = 0; i < plantCount; i++) {
-            listOfPlants.add(plantCreator.create(plantClass));
-        }
-    }
-
-    public void addAnimalsInCell(){
-        List<TypeOfAnimal> types = Arrays.stream(TypeOfAnimal.values()).collect(Collectors.toList());
-        int randomCountOfCycles = defineCountOfTypesOfAnimalInCell(types);
-        int randomMaxCountInCell = 0;
+    public void addResidentsToCell() {
+        List<TypeOfEntity> types = Arrays.stream(TypeOfEntity.values()).collect(Collectors.toList());
+        int randomCountOfCycles = defineCountOfTypesOfEntityInCell(types);
         for (int i = 0; i < randomCountOfCycles; i++) {
-            TypeOfAnimal randomType = types.get(Randomiser.getRandomCount(0, types.size()));
-            Class<? extends Animal> randomClass = (Class<? extends Animal>) AnimalMap.ANIMALS.get(randomType);
+            TypeOfEntity randomType = types.get(Randomiser.getRandomCount(0, types.size()));
+            @SuppressWarnings("unchecked")
+            Class<? extends Entity> randomClass = (Class<? extends Entity>) EntityMap.ENTITIES.get(randomType);
             try {
                 Limit randomLimit = randomClass.getConstructor().newInstance().readConfig();
-                randomMaxCountInCell = Integer.parseInt(randomLimit.getMaxCountInCell());
+                int randomMaxCountInCell = Integer.parseInt(randomLimit.getMaxCountInCell());
                 int randomCount = Randomiser.getRandomCount(0, randomMaxCountInCell);
-                if(residentsInCell.containsKey(randomType)){
-                    ArrayDeque<Animal> residentsDeque = residentsInCell.get(randomType);
+                if (residentsInCell.containsKey(randomType)) {
+                    ArrayDeque<Entity> residentsDeque = residentsInCell.get(randomType);
                     int countInCell = residentsDeque.size();
-                    if(randomMaxCountInCell==countInCell) continue;
-                    if(countInCell<randomMaxCountInCell){
-                        int vacantPlaces = randomMaxCountInCell-countInCell;
+                    if (randomMaxCountInCell == countInCell) continue;
+                    if (countInCell < randomMaxCountInCell) {
+                        int vacantPlaces = randomMaxCountInCell - countInCell;
                         int freePlaces = Math.min(randomCount, vacantPlaces);
-                        mergeDeque(freePlaces, randomLimit, randomClass, residentsDeque);
+                        mergeDeque(freePlaces, randomClass, residentsDeque);
                     }
-                } else{
-                    ArrayDeque<Animal> randomAnimalDeque = fillAnimalDeque(randomCount, randomLimit, randomClass);
+                } else {
+                    ArrayDeque<Entity> randomAnimalDeque = fillEntityDeque(randomCount, randomClass);
                     residentsInCell.put(randomType, randomAnimalDeque);
                 }
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private void mergeDeque(int freePlaces, Limit randomLimit, Class<? extends Animal> randomClass, ArrayDeque<Animal> residentsDeque) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        ArrayDeque<Animal> newDeque = residentsDeque;
-        TypeOfAnimal randomType = TypeOfAnimal.valueOf(randomClass.getName().toUpperCase());
+    private void mergeDeque(int freePlaces, Class<? extends Entity> randomClass, ArrayDeque<Entity> residentsDeque) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         for (int j = 0; j < freePlaces; j++) {
-            Animal randomAnimal = animalCreator.create(randomClass);
-            newDeque.add(randomAnimal);
-            System.out.println(randomAnimal.getIcon());
+            Entity randomEntity = entityCreator.create(randomClass);
+            residentsDeque.add(randomEntity);
         }
-        residentsInCell.put(randomType, newDeque);
     }
 
-    private static int defineCountOfTypesOfAnimalInCell(List<TypeOfAnimal> types) {
-        int randomCountOfCycles = Randomiser.getRandomCount(1, types.size()+1);
-        return randomCountOfCycles;
+    private static int defineCountOfTypesOfEntityInCell(List<TypeOfEntity> types) {
+        return Randomiser.getRandomCount(1, types.size() + 1);
     }
 
-    private ArrayDeque<Animal> fillAnimalDeque(int randomCount, Limit randomLimit, Class<? extends Animal> randomClass) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        ArrayDeque<Animal> randomAnimalDeque = new ArrayDeque<>();
+    private ArrayDeque<Entity> fillEntityDeque(int randomCount, Class<? extends Entity> randomClass) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        ArrayDeque<Entity> randomAnimalDeque = new ArrayDeque<>();
         for (int j = 0; j < randomCount; j++) {
-            Animal randomAnimal = animalCreator.create(randomClass);
-            randomAnimalDeque.add(randomAnimal);
-            System.out.println(randomAnimal.getIcon());
+            Entity randomEntity = entityCreator.create(randomClass);
+            randomAnimalDeque.add(randomEntity);
         }
         return randomAnimalDeque;
     }
 
-
+    public Object monitor() {
+        return this;
+    }
 }

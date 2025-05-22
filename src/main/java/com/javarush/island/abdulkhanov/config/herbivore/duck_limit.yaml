@@ -1,0 +1,6 @@
+---
+maxSpeed: 4
+maxWeight: 1.0
+maxCountInCell: 200
+maxFood: 0.15
+---

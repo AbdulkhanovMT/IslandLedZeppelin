@@ -1,7 +1,7 @@
 package com.javarush.island.abdulkhanov.entity.ability;
 
-import com.javarush.island.abdulkhanov.entity.Entity;
+import com.javarush.island.abdulkhanov.gamefield.Cell;
 
 public interface Reproducible {
-    boolean reproduce(Entity entity);
+    boolean reproduce(Cell cell);
 }

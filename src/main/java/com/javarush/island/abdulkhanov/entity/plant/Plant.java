@@ -2,14 +2,16 @@ package com.javarush.island.abdulkhanov.entity.plant;
 
 import com.javarush.island.abdulkhanov.entity.Entity;
 import com.javarush.island.abdulkhanov.entity.ability.Reproducible;
+import com.javarush.island.abdulkhanov.gamefield.Cell;
 
 public class Plant extends Entity implements Reproducible {
     private final double weight = 1.0;
-    public static final int MAX_IN_CELL = 200;
-    public static final int MIN_IN_CELL = MAX_IN_CELL/10;
+    private final String icon = "";
+    private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/plants/plant_limit.yaml";
 
-    public int getMaxInCell() {
-        return MAX_IN_CELL;
+    @Override
+    public String getStatsPath() {
+        return "";
     }
 
     @Override
@@ -18,7 +20,7 @@ public class Plant extends Entity implements Reproducible {
     }
 
     @Override
-    public boolean reproduce(Entity entity) {
+    public boolean reproduce(Cell cell) {
         return false;
     }
 }
