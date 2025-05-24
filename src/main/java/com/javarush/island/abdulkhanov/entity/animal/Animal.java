@@ -2,24 +2,23 @@ package com.javarush.island.abdulkhanov.entity.animal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javarush.island.abdulkhanov.entity.Entity;
-import com.javarush.island.abdulkhanov.entity.ability.Moveable;
-import com.javarush.island.abdulkhanov.entity.ability.Reproducible;
+import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
+import com.javarush.island.abdulkhanov.settings.AnimalSettings;
+import com.javarush.island.abdulkhanov.util.Randomiser;
 
-public abstract class Animal extends Entity implements Moveable, Reproducible {
-    private int age;
-    private boolean gender;
-    private Limit animalLimit;
+import java.util.*;
+
+public abstract class Animal extends Entity implements Eating {
     private boolean isStarving;
+
 
     public Animal() {
     }
 
-    public Animal(double weight, boolean gender, Limit animalLimit) {
-        super(weight);
-        this.gender = gender;
-        this.animalLimit = animalLimit;
+    public Animal(double weight, boolean gender, Limit entityLimit) {
+        super(weight, gender, entityLimit);
     }
 
     public abstract String getStatsPath();
@@ -31,25 +30,62 @@ public abstract class Animal extends Entity implements Moveable, Reproducible {
     }
 
     @Override
-    public boolean move(Cell cell){
+    public boolean eat(Cell cell) {
+        boolean foundFood = safeFindBestTarget(cell);
+        if (!foundFood) {
+            this.looseWeight();
+            this.move(cell);
+            return false;
+        }
         return false;
     }
 
-    @Override
-    public boolean reproduce(Cell cell){
+    private void looseWeight() {
+        this.setWeight(this.getWeight()-1.0);
+    }
+
+    private boolean safeFindBestTarget(Cell cell) {
+        List<ArrayDeque<Entity>> entityDequesList = cell.getResidentsInCell().values().stream().toList();
+        Map<String, Integer> targetsMap = AnimalSettings.getTargetMap(this.getClass());
+        Set<Map.Entry<String, Integer>> targetsSet = targetsMap.entrySet();
+        List<Map.Entry<String, Integer>> orderedListOfTargets = targetsSet.stream()
+                .sorted(Comparator.comparingInt(Map.Entry::getValue)).toList();
+        String targetName = "";
+        int percentage = 0;
+        for (Map.Entry<String, Integer> orderedListOfTarget : orderedListOfTargets) {
+            for (ArrayDeque<Entity> entities : entityDequesList) {
+                if(entities.getFirst().getClass().getName().equalsIgnoreCase(orderedListOfTarget.getKey())){
+                    targetName = orderedListOfTarget.getKey();
+                    percentage = orderedListOfTarget.getValue();
+                    break;
+                }
+            }
+        }
+        int randomChance = Randomiser.getRandomCount(0,101);
+        if(randomChance<percentage){
+            removeTarget(cell, targetName);
+            return true;
+        }
         return false;
     }
 
-    public ObjectMapper getMapper(){
+    private void removeTarget(Cell cell, String targetName) {
+        ArrayDeque<Entity> entityDeque = cell.getResidentsInCell().get(targetName.toUpperCase());
+        Entity eatenEntity = entityDeque.remove();
+        this.addWeight(eatenEntity.getWeight());
+    }
+
+    private void addWeight(double eatenWeight) {
+        double maxWeight = Double.parseDouble(this.getEntityLimit().getMaxWeight());
+        if(Math.abs(maxWeight-this.getWeight()-eatenWeight)<0.0001){
+            this.setWeight(maxWeight);
+        } else{
+            this.setWeight(Math.min(maxWeight, this.getWeight()+eatenWeight));
+        }
+    }
+
+    public ObjectMapper getMapper() {
         return super.getMapper();
-    }
-
-    public boolean getGender() {
-        return gender;
-    }
-
-    public Limit getEntityLimit() {
-        return animalLimit;
     }
 
     @Override

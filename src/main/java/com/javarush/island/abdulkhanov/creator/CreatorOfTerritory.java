@@ -1,13 +1,13 @@
 package com.javarush.island.abdulkhanov.creator;
 
-import com.javarush.island.abdulkhanov.gamefield.Cell;
+import com.javarush.island.abdulkhanov.gamefield.IslandTerritory;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class CreatorOfCell extends Creator<Cell> {
+public class CreatorOfTerritory extends Creator<IslandTerritory> {
 
     @Override
-    public Cell create(Class<? extends Cell> tClass) {
+    public IslandTerritory create(Class<? extends IslandTerritory> tClass) {
         try {
             return tClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

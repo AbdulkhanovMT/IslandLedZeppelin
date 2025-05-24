@@ -2,7 +2,7 @@ package com.javarush.island.abdulkhanov.gamefield;
 
 import com.javarush.island.abdulkhanov.creator.CreatorOfEntity;
 import com.javarush.island.abdulkhanov.entity.Entity;
-import com.javarush.island.abdulkhanov.entity.animal.EntityMap;
+import com.javarush.island.abdulkhanov.util.EntityMap;
 import com.javarush.island.abdulkhanov.entity.animal.TypeOfEntity;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.util.Randomiser;
@@ -16,12 +16,48 @@ public class Cell {
 
     private final ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> residentsInCell = new ConcurrentHashMap<>();
     private final CreatorOfEntity entityCreator = new CreatorOfEntity();
+    private final List<Cell> nextCells = new ArrayList<>();
+    private final int id;
 
     public Cell() {
+        id = Randomiser.getRandomCount(0, Integer.MAX_VALUE);
     }
 
     public ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> getResidentsInCell() {
         return residentsInCell;
+    }
+
+    public List<Cell> getNextCells() {
+        return nextCells;
+    }
+
+    public void findNextCells(Cell[][] cellsOfTerritory) {
+        int[] definedRowAndCol = this.defineRowAndCol(cellsOfTerritory);
+        int row = definedRowAndCol != null ? definedRowAndCol[0] : 0;
+        int col = definedRowAndCol != null ? definedRowAndCol[1] : 0;
+        int higher = ((row - 1) < 0) ? 0 : (row + 1);
+        int lower = ((row + 1) > (cellsOfTerritory.length - 1)) ? row : (row + 1);
+        int rightSide = ((col + 1) > (cellsOfTerritory[row].length - 1)) ? col : (col + 1);
+        int leftSide = ((col - 1) < (cellsOfTerritory[row].length - 1)) ? (cellsOfTerritory[row].length - 1) : (col + 1);
+        addCellsNeighbours(cellsOfTerritory, lower, col, row, rightSide, leftSide, higher);
+    }
+
+    private void addCellsNeighbours(Cell[][] cellsOfTerritory, int lower, int col, int row, int rightSide, int leftSide, int higher) {
+        nextCells.add(cellsOfTerritory[lower][col]);
+        nextCells.add(cellsOfTerritory[row][rightSide]);
+        nextCells.add(cellsOfTerritory[row][leftSide]);
+        nextCells.add(cellsOfTerritory[higher][col]);
+    }
+
+    private int[] defineRowAndCol(Cell[][] cellsOfTerritory) {
+        for (int i = 0; i < cellsOfTerritory.length; i++) {
+            for (int j = 0; j < cellsOfTerritory.length; j++) {
+                if(this.equals(cellsOfTerritory[i][j])){
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return null;
     }
 
     public void addResidentsToCell() {
@@ -77,5 +113,17 @@ public class Cell {
 
     public Object monitor() {
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return id == cell.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
