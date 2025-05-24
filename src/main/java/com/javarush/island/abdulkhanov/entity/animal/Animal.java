@@ -6,6 +6,7 @@ import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
 import com.javarush.island.abdulkhanov.settings.AnimalSettings;
+import com.javarush.island.abdulkhanov.util.EntityCounter;
 import com.javarush.island.abdulkhanov.util.Randomiser;
 
 import java.util.*;
@@ -72,6 +73,7 @@ public abstract class Animal extends Entity implements Eating {
     private void removeTarget(Cell cell, String targetName) {
         ArrayDeque<Entity> entityDeque = cell.getResidentsInCell().get(targetName.toUpperCase());
         Entity eatenEntity = entityDeque.remove();
+        EntityCounter.reducePopulation(TypeOfEntity.valueOf(eatenEntity.getClass().getName().toUpperCase()));
         this.addWeight(eatenEntity.getWeight());
     }
 
