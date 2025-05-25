@@ -2,14 +2,19 @@ package com.javarush.island.abdulkhanov.gamefield;
 
 import com.javarush.island.abdulkhanov.creator.CreatorOfCell;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class IslandTerritory {
     private final int ROWS = 3;
     private final int COLUMNS = 5;
     private final Cell[][] cells = new Cell[ROWS][COLUMNS];
+
+
     private final CreatorOfCell cellCreator = new CreatorOfCell();
 
     public IslandTerritory() {
-
+        this.initializeSimulationMap();
     }
 
     public void initializeSimulationMap(){
@@ -32,5 +37,21 @@ public class IslandTerritory {
                 cell[i].findNextCells(cells);
             }
         }
+    }
+
+    public Stream<Cell> getStreamOfCells(){
+        return Arrays.stream(cells).flatMap(Arrays::stream);
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public int getCOLUMNS() {
+        return COLUMNS;
+    }
+
+    public int getROWS() {
+        return ROWS;
     }
 }

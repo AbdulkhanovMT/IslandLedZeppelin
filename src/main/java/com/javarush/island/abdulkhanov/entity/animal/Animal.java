@@ -11,7 +11,7 @@ import com.javarush.island.abdulkhanov.util.Randomiser;
 
 import java.util.*;
 
-public abstract class Animal extends Entity implements Eating {
+public abstract class Animal extends Entity {
     private boolean isStarving;
 
 
@@ -35,10 +35,27 @@ public abstract class Animal extends Entity implements Eating {
         boolean foundFood = safeFindBestTarget(cell);
         if (!foundFood) {
             this.looseWeight();
+            if(this.getWeight()<=0.0){
+                if(this.safeDie(cell)){
+                    return false;
+                }
+            }
             this.move(cell);
             return false;
         }
-        return false;
+        return true;
+    }
+
+    private boolean safeDie(Cell cell) {
+        synchronized (cell.monitor()){
+           ArrayDeque<Entity>  residentDeque =  cell.getResidentsInCell().get(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+           if(!residentDeque.isEmpty()){
+               residentDeque.removeFirst();
+               EntityCounter.reducePopulation(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+               return true;
+           }
+           return false;
+        }
     }
 
     private void looseWeight() {

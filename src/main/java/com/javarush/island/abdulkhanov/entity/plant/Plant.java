@@ -1,6 +1,7 @@
 package com.javarush.island.abdulkhanov.entity.plant;
 
 import com.javarush.island.abdulkhanov.entity.Entity;
+import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
 
 public class Plant extends Entity {
@@ -25,6 +26,11 @@ public class Plant extends Entity {
 
     @Override
     public boolean move(Cell cell) {
+        return false;
+    }
+
+    @Override
+    public boolean eat(Cell cell) {
         return false;
     }
 }

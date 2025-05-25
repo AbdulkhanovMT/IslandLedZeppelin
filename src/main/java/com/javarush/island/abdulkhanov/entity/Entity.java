@@ -3,6 +3,7 @@ package com.javarush.island.abdulkhanov.entity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.javarush.island.abdulkhanov.creator.CreatorOfEntity;
+import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.ability.Moveable;
 import com.javarush.island.abdulkhanov.entity.ability.Reproducible;
 import com.javarush.island.abdulkhanov.entity.animal.TypeOfEntity;
@@ -17,7 +18,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Entity implements Reproducible, Moveable {
+public abstract class Entity implements Reproducible, Moveable, Eating {
     private double weight;
 
     public void setWeight(double weight) {
@@ -175,4 +176,6 @@ public abstract class Entity implements Reproducible, Moveable {
     public String getIcon(){
         return icon;
     }
+
+    public abstract boolean eat(Cell cell);
 }

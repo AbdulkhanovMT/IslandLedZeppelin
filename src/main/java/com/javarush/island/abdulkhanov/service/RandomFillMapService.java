@@ -2,9 +2,9 @@ package com.javarush.island.abdulkhanov.service;
 
 import com.javarush.island.abdulkhanov.Simulation;
 
-public class EatingService extends AbstractService {
+public class RandomFillMapService extends AbstractService {
 
-    public EatingService(Simulation simulation){
+    public RandomFillMapService(Simulation simulation){
         super(simulation);
     }
 
