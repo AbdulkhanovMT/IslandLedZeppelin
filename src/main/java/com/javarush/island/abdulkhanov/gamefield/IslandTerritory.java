@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class IslandTerritory {
-    private final int ROWS = 3;
-    private final int COLUMNS = 5;
+    private static final int ROWS = 11;
+    private static final int COLUMNS = 11;
     private final Cell[][] cells = new Cell[ROWS][COLUMNS];
 
 
@@ -25,7 +25,7 @@ public class IslandTerritory {
 
     private void createCells() {
         for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[ROWS].length; j++) {
+            for (int j = 0; j < cells[ROWS-1].length; j++) {
                 cells[i][j] = cellCreator.create(Cell.class);
             }
         }
@@ -33,7 +33,7 @@ public class IslandTerritory {
 
     private void writeNeighboursCells() {
         for (Cell[] cell : cells) {
-            for (int i = 0; i < cells[ROWS].length; i++) {
+            for (int i = 0; i < cells[ROWS-1].length; i++) {
                 cell[i].findNextCells(cells);
             }
         }
@@ -47,11 +47,15 @@ public class IslandTerritory {
         return cells;
     }
 
-    public int getCOLUMNS() {
+    public static int getCOLUMNS() {
         return COLUMNS;
     }
 
-    public int getROWS() {
+    public static int getROWS() {
         return ROWS;
+    }
+
+    public Cell getCell(int row, int col) {
+        return cells[row][col];
     }
 }

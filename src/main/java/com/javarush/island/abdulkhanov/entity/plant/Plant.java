@@ -2,16 +2,30 @@ package com.javarush.island.abdulkhanov.entity.plant;
 
 import com.javarush.island.abdulkhanov.entity.Entity;
 import com.javarush.island.abdulkhanov.entity.ability.Eating;
+import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
+import lombok.Getter;
 
 public class Plant extends Entity {
     private final double weight = 1.0;
-    private final String icon = "";
+    private final String icon = "\uD83C\uDF31";
     private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/plants/plant_limit.yaml";
+
+    public Plant() {
+    }
+
+    public Plant(double weight, boolean gender, Limit entityLimit) {
+        super(weight, gender, entityLimit);
+    }
+
+    @Override
+    public String getIcon() {
+        return icon;
+    }
 
     @Override
     public String getStatsPath() {
-        return "";
+        return statsPath;
     }
 
     @Override

@@ -20,14 +20,9 @@ import java.util.Objects;
 
 public abstract class Entity implements Reproducible, Moveable, Eating {
     private double weight;
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
     private static final ObjectMapper mapper = new YAMLMapper();
-    private final String icon = "";
     private boolean gender;
+    private final String icon = "";
     private Limit entityLimit;
     private CreatorOfEntity entityCreator = new CreatorOfEntity();
 
@@ -173,9 +168,11 @@ public abstract class Entity implements Reproducible, Moveable, Eating {
         return weight;
     }
 
-    public String getIcon(){
-        return icon;
-    }
+    public abstract String getIcon();
 
     public abstract boolean eat(Cell cell);
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
 }

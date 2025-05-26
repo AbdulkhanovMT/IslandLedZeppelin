@@ -1,6 +1,7 @@
 package com.javarush.island.abdulkhanov.entity.predator;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
+import lombok.Getter;
 
 public class Wolf extends Predator{
 
@@ -16,6 +17,11 @@ public class Wolf extends Predator{
 
     public String getStatsPath() {
         return statsPath;
+    }
+
+    @Override
+    public String getIcon() {
+        return icon;
     }
 
 }

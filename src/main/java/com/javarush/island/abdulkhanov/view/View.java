@@ -8,7 +8,7 @@ public interface View {
 
     void showMap(IslandTerritory islandTerritory);
 
-    void showStatistics(IslandTerritory islandTerritory);
+    void showStatistics();
 
-    void showScale(IslandTerritory islandTerritory);
+    void showScale();
 }

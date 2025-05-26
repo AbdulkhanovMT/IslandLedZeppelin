@@ -5,7 +5,7 @@ import com.javarush.island.abdulkhanov.entity.limit.Limit;
 public class Buffalo extends Herbivore{
 
     private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/herbivore/buffalo_limit.yaml";
-    private final String icon = "\uD83D\uDC07";
+    private final String icon = "\uD83D\uDC03";
 
     public Buffalo() {
     }
@@ -18,4 +18,8 @@ public class Buffalo extends Herbivore{
         return statsPath;
     }
 
+    @Override
+    public String getIcon() {
+        return icon;
+    }
 }

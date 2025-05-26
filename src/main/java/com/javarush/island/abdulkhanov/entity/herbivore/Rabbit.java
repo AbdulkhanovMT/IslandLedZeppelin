@@ -18,4 +18,8 @@ public class Rabbit extends Herbivore{
         return statsPath;
     }
 
+    @Override
+    public String getIcon() {
+        return icon;
+    }
 }

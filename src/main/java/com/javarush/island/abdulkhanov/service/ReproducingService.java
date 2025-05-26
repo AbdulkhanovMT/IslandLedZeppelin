@@ -11,6 +11,6 @@ public class ReproducingService extends AbstractService {
     @Override
     public void run() {
         simulation.getIsland().getStreamOfCells()
-                .forEach(cell -> processOneCell(cell, o -> o.eat(cell)));
+                .forEach(cell -> processOneCell(cell, o -> o.reproduce(cell)));
     }
 }

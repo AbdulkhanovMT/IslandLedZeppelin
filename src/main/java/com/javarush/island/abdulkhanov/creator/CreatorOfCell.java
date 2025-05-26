@@ -8,12 +8,7 @@ public class CreatorOfCell extends Creator<Cell> {
 
     @Override
     public Cell create(Class<? extends Cell> tClass) {
-        try {
-            return tClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new Cell();
     }
 
 }

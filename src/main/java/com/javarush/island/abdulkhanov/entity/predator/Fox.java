@@ -1,11 +1,12 @@
 package com.javarush.island.abdulkhanov.entity.predator;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
+import lombok.Getter;
 
 public class Fox extends Predator{
 
     private final String statsPath = "src/main/java/com/javarush/island/abdulkhanov/config/predator/fox_limit.yaml";
-    private final String icon = "\uD83D\uDC3A";
+    private final String icon = "\uD83E\uDD8A";
 
     public Fox() {
     }
@@ -18,4 +19,8 @@ public class Fox extends Predator{
         return statsPath;
     }
 
+    @Override
+    public String getIcon() {
+        return icon;
+    }
 }

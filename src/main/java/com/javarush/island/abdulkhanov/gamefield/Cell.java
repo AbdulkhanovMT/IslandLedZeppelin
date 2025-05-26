@@ -17,10 +17,12 @@ public class Cell {
     private final ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> residentsInCell = new ConcurrentHashMap<>();
     private final CreatorOfEntity entityCreator = new CreatorOfEntity();
     private final List<Cell> nextCells = new ArrayList<>();
-    private final int id;
+    private static int idCounter = 0;
+    private int id;
 
     public Cell() {
-        id = Randomiser.getRandomCount(0, Integer.MAX_VALUE);
+        id = idCounter++;
+        this.addResidentsToCell();
     }
 
     public ConcurrentHashMap<TypeOfEntity, ArrayDeque<Entity>> getResidentsInCell() {
@@ -35,10 +37,10 @@ public class Cell {
         int[] definedRowAndCol = this.defineRowAndCol(cellsOfTerritory);
         int row = definedRowAndCol != null ? definedRowAndCol[0] : 0;
         int col = definedRowAndCol != null ? definedRowAndCol[1] : 0;
-        int higher = ((row - 1) < 0) ? 0 : (row + 1);
+        int higher = Math.max((row - 1), 0);
         int lower = ((row + 1) > (cellsOfTerritory.length - 1)) ? row : (row + 1);
         int rightSide = ((col + 1) > (cellsOfTerritory[row].length - 1)) ? col : (col + 1);
-        int leftSide = ((col - 1) < (cellsOfTerritory[row].length - 1)) ? (cellsOfTerritory[row].length - 1) : (col + 1);
+        int leftSide = Math.max((col - 1), 0);
         addCellsNeighbours(cellsOfTerritory, lower, col, row, rightSide, leftSide, higher);
     }
 
@@ -51,7 +53,7 @@ public class Cell {
 
     private int[] defineRowAndCol(Cell[][] cellsOfTerritory) {
         for (int i = 0; i < cellsOfTerritory.length; i++) {
-            for (int j = 0; j < cellsOfTerritory.length; j++) {
+            for (int j = 0; j < cellsOfTerritory[0].length; j++) {
                 if(this.equals(cellsOfTerritory[i][j])){
                     return new int[]{i, j};
                 }

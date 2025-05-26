@@ -29,6 +29,6 @@ public class CreatorOfEntity extends Creator<Entity>{
     }
 
     private static TypeOfEntity getTypeOfEntity(Class<? extends Entity> entityClass) {
-        return TypeOfEntity.valueOf(entityClass.getName().toUpperCase());
+        return TypeOfEntity.valueOf(entityClass.getSimpleName().toUpperCase());
     }
 }

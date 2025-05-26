@@ -11,6 +11,6 @@ public class MovingService extends AbstractService{
     @Override
     public void run() {
         simulation.getIsland().getStreamOfCells()
-                .forEach(cell -> processOneCell(cell, o -> o.eat(cell)));
+                .forEach(cell -> processOneCell(cell, o -> o.move(cell)));
     }
 }

@@ -3,10 +3,12 @@ package com.javarush.island.abdulkhanov.util;
 import com.javarush.island.abdulkhanov.entity.animal.TypeOfEntity;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EntityCounter {
-    public static Map<TypeOfEntity, Integer> entitiesRecord = new HashMap<>();
+    private static Map<TypeOfEntity, Integer> entitiesRecord = new HashMap<>();
+
 
     private EntityCounter() {
     }
@@ -15,6 +17,10 @@ public class EntityCounter {
         for (TypeOfEntity value : TypeOfEntity.values()) {
             entitiesRecord.put(value, 0);
         }
+    }
+
+    public static Map<TypeOfEntity, Integer> getEntitiesRecord() {
+        return entitiesRecord;
     }
 
     public static void increasePopulation(TypeOfEntity someTypeOfEntity) {
@@ -27,8 +33,13 @@ public class EntityCounter {
         entitiesRecord.put(someTypeOfEntity, --record);
     }
 
-    public static int getPopulation(TypeOfEntity someTypeOfEntity) {
-        return entitiesRecord.get(someTypeOfEntity);
+    public static int getSumOfRecords(){
+        int sum = 0;
+        List<Integer> ints = entitiesRecord.values().stream().toList();
+        for (Integer anInt : ints) {
+            sum = sum + anInt;
+        }
+        return sum;
     }
 
 }

@@ -16,6 +16,9 @@ public class Randomiser {
 
     public static double getRandomWeight(double minWeight, double maxWeight) {
         minWeight = Math.round(minWeight);
+        if((maxWeight < 1.0) || Double.compare(maxWeight, 1.0)==0){
+            return maxWeight;
+        }
         double randomWeight = 1.0 * ThreadLocalRandom.current().nextInt((int) minWeight, (int) maxWeight);
         return (randomWeight < 1) ? 1.0 : randomWeight;
     }
