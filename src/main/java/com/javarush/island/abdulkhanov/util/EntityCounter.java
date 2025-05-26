@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EntityCounter {
-    private static Map<TypeOfEntity, Integer> entitiesRecord = new HashMap<>();
-
+    private final static Map<TypeOfEntity, Integer> entitiesRecord = new HashMap<>();
 
     private EntityCounter() {
     }

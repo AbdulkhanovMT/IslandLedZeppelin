@@ -2,8 +2,6 @@ package com.javarush.island.abdulkhanov.creator;
 
 import com.javarush.island.abdulkhanov.gamefield.Cell;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class CreatorOfCell extends Creator<Cell> {
 
     @Override

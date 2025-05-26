@@ -2,7 +2,6 @@ package com.javarush.island.abdulkhanov.entity.animal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javarush.island.abdulkhanov.entity.Entity;
-import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
 import com.javarush.island.abdulkhanov.settings.AnimalSettings;
@@ -12,8 +11,6 @@ import com.javarush.island.abdulkhanov.util.Randomiser;
 import java.util.*;
 
 public abstract class Animal extends Entity {
-    private boolean isStarving;
-
 
     public Animal() {
     }
@@ -23,12 +20,6 @@ public abstract class Animal extends Entity {
     }
 
     public abstract String getStatsPath();
-
-    private final String statsPath = null;
-
-    public boolean isStarving() {
-        return isStarving;
-    }
 
     @Override
     public boolean eat(Cell cell) {

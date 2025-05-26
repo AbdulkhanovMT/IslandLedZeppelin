@@ -21,10 +21,6 @@ public class AnimalSettings {
        loadFoodMap();
     }
 
-    public static Map<String, Map<String, Integer>> getFoodMap() {
-        return foodMap;
-    }
-
     public static void loadFoodMap() {
         File yamlAnimalPercentageFile = new File(percentagePath);
         try {
@@ -35,15 +31,7 @@ public class AnimalSettings {
     }
 
     public static Map<String, Integer> getTargetMap(Class<? extends Entity> clazz){
-        Map<String, Integer> targetsMap = foodMap.get(clazz.getName());
-        return targetsMap;
+        return foodMap.get(clazz.getName());
     }
 
-    private ObjectMapper getAnimalPercentage() {
-        return animalPercentage;
-    }
-
-    private String getPercentagePath() {
-        return percentagePath;
-    }
 }

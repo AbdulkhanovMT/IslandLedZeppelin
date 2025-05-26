@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -92,7 +93,11 @@ public class Setting {
         ObjectReader readerForUpdating = mapper.readerForUpdating(this);
         URL resource = Setting.class.getResource(SETTING_YAML);
         if (Objects.nonNull(resource)) {
-            readerForUpdating.readValue(resource.openStream());
+            try {
+                readerForUpdating.readValue(resource.openStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     //=============================== </INIT> ========================================

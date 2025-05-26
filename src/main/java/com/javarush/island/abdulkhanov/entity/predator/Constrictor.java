@@ -1,7 +1,6 @@
 package com.javarush.island.abdulkhanov.entity.predator;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
-import lombok.Getter;
 
 public class Constrictor extends Predator{
 

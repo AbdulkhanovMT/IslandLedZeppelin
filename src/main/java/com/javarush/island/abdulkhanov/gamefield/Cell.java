@@ -18,7 +18,7 @@ public class Cell {
     private final CreatorOfEntity entityCreator = new CreatorOfEntity();
     private final List<Cell> nextCells = new ArrayList<>();
     private static int idCounter = 0;
-    private int id;
+    private final int id;
 
     public Cell() {
         id = idCounter++;

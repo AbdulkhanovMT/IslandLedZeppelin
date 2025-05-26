@@ -1,10 +1,8 @@
 package com.javarush.island.abdulkhanov.entity.plant;
 
 import com.javarush.island.abdulkhanov.entity.Entity;
-import com.javarush.island.abdulkhanov.entity.ability.Eating;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 import com.javarush.island.abdulkhanov.gamefield.Cell;
-import lombok.Getter;
 
 public class Plant extends Entity {
     private final double weight = 1.0;

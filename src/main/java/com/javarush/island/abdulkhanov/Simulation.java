@@ -7,7 +7,7 @@ public class Simulation {
 
     private final IslandTerritory island;
     private final View view;
-    private boolean isFinished = false;
+    private final boolean isFinished = false;
 
     public Simulation(IslandTerritory island, View view){
         this.island = island;

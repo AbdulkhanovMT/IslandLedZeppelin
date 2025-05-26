@@ -13,11 +13,21 @@ public class Game {
     private final GameMap gameMap;
     private final Initialization entityFactory;
     private View view;
-    private boolean isFinished = false;
 
     public Game(GameMap gameMap, Initialization entityFactory, View view) {
         this.gameMap = gameMap;
         this.entityFactory = entityFactory;
         this.view = view;
     }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public View getView() {
+        return view;
+    }
+
+    private boolean isFinished = false;
+
 }

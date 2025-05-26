@@ -22,7 +22,6 @@ public abstract class Entity implements Reproducible, Moveable, Eating {
     private double weight;
     private static final ObjectMapper mapper = new YAMLMapper();
     private boolean gender;
-    private final String icon = "";
     private Limit entityLimit;
     private CreatorOfEntity entityCreator = new CreatorOfEntity();
 
@@ -129,12 +128,11 @@ public abstract class Entity implements Reproducible, Moveable, Eating {
     }
 
     private static ArrayDeque<Entity> getSomeResidentDeque(Cell cell) {
-        ArrayDeque<Entity> someResidentDeque =  cell.getResidentsInCell()
+        return cell.getResidentsInCell()
                 .values()
                 .stream()
                 .filter(Objects::nonNull)
                 .findAny().orElseGet(null);
-        return someResidentDeque;
     }
 
     public boolean isGender() {
