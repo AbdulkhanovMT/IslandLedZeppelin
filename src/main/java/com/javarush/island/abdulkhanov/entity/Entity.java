@@ -45,8 +45,21 @@ public abstract class Entity implements Reproducible, Moveable, Eating {
         if(nextCell==null){
             return false;
         }
+        this.safeDie(cell);
         safeAddBornEntityToDefinedDeque(nextCell, maxCount);
         return true;
+    }
+
+    private boolean safeDie(Cell cell) {
+        synchronized (cell.monitor()) {
+            ArrayDeque<Entity> residentDeque = cell.getResidentsInCell().get(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+            if (!residentDeque.isEmpty()) {
+                residentDeque.removeFirst();
+                EntityCounter.reducePopulation(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+                return true;
+            }
+            return false;
+        }
     }
 
     private Cell safeGetNextCell(Cell cell) {

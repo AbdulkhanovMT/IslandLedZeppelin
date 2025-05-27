@@ -50,7 +50,7 @@ public abstract class Animal extends Entity {
     }
 
     private void looseWeight() {
-        this.setWeight(this.getWeight() - 1.0);
+        this.setWeight(this.getWeight() - 5.0);
     }
 
     private boolean safeFindBestTarget(Cell cell) {
