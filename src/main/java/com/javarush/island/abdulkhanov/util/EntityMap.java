@@ -1,9 +1,9 @@
 package com.javarush.island.abdulkhanov.util;
 
 import com.javarush.island.abdulkhanov.entity.animal.TypeOfEntity;
-import com.javarush.island.abdulkhanov.entity.herbivore.*;
+import com.javarush.island.abdulkhanov.entity.animal.herbivore.*;
 import com.javarush.island.abdulkhanov.entity.plant.Plant;
-import com.javarush.island.abdulkhanov.entity.predator.*;
+import com.javarush.island.abdulkhanov.entity.animal.predator.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 

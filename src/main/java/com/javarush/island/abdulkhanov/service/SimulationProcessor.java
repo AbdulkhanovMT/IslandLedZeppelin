@@ -12,7 +12,7 @@ public class SimulationProcessor extends Thread {
     public static final int CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors();
     private final Simulation simulation;
     private final List<Runnable> services;
-    private final int PERIOD = 50;
+    private final int PERIOD = 1000;
     private ScheduledExecutorService mainPool;
 
     public SimulationProcessor(Simulation simulation, List<Runnable> services) {

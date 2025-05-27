@@ -1,4 +1,4 @@
-package com.javarush.island.abdulkhanov.entity.predator;
+package com.javarush.island.abdulkhanov.entity.animal.predator;
 
 import com.javarush.island.abdulkhanov.entity.animal.Animal;
 import com.javarush.island.abdulkhanov.entity.limit.Limit;

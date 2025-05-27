@@ -1,4 +1,4 @@
-package com.javarush.island.abdulkhanov.entity.herbivore;
+package com.javarush.island.abdulkhanov.entity.animal.herbivore;
 
 import com.javarush.island.abdulkhanov.entity.limit.Limit;
 

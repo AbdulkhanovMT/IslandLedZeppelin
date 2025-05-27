@@ -31,7 +31,7 @@ public class AnimalSettings {
     }
 
     public static Map<String, Integer> getTargetMap(Class<? extends Entity> clazz){
-        return foodMap.get(clazz.getName());
+        return foodMap.get(clazz.getSimpleName());
     }
 
 }

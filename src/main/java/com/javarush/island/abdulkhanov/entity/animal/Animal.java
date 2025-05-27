@@ -26,8 +26,8 @@ public abstract class Animal extends Entity {
         boolean foundFood = safeFindBestTarget(cell);
         if (!foundFood) {
             this.looseWeight();
-            if(this.getWeight()<=0.0){
-                if(this.safeDie(cell)){
+            if (this.getWeight() <= 0.0) {
+                if (this.safeDie(cell)) {
                     return false;
                 }
             }
@@ -38,59 +38,64 @@ public abstract class Animal extends Entity {
     }
 
     private boolean safeDie(Cell cell) {
-        synchronized (cell.monitor()){
-           ArrayDeque<Entity>  residentDeque =  cell.getResidentsInCell().get(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
-           if(!residentDeque.isEmpty()){
-               residentDeque.removeFirst();
-               EntityCounter.reducePopulation(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
-               return true;
-           }
-           return false;
+        synchronized (cell.monitor()) {
+            ArrayDeque<Entity> residentDeque = cell.getResidentsInCell().get(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+            if (!residentDeque.isEmpty()) {
+                residentDeque.removeFirst();
+                EntityCounter.reducePopulation(TypeOfEntity.valueOf(this.getClass().getName().toUpperCase()));
+                return true;
+            }
+            return false;
         }
     }
 
     private void looseWeight() {
-        this.setWeight(this.getWeight()-1.0);
+        this.setWeight(this.getWeight() - 1.0);
     }
 
     private boolean safeFindBestTarget(Cell cell) {
-        List<ArrayDeque<Entity>> entityDequesList = cell.getResidentsInCell().values().stream().toList();
-        Map<String, Integer> targetsMap = AnimalSettings.getTargetMap(this.getClass());
-        Set<Map.Entry<String, Integer>> targetsSet = targetsMap.entrySet();
-        List<Map.Entry<String, Integer>> orderedListOfTargets = targetsSet.stream()
-                .sorted(Comparator.comparingInt(Map.Entry::getValue)).toList();
-        String targetName = "";
-        int percentage = 0;
-        for (Map.Entry<String, Integer> orderedListOfTarget : orderedListOfTargets) {
-            for (ArrayDeque<Entity> entities : entityDequesList) {
-                if(entities.getFirst().getClass().getName().equalsIgnoreCase(orderedListOfTarget.getKey())){
-                    targetName = orderedListOfTarget.getKey();
-                    percentage = orderedListOfTarget.getValue();
-                    break;
+        synchronized (cell.monitor()) {
+            List<ArrayDeque<Entity>> entityDequesList = cell.getResidentsInCell().values().stream().toList();
+            Map<String, Integer> targetsMap = AnimalSettings.getTargetMap(this.getClass());
+            Set<Map.Entry<String, Integer>> targetsSet = targetsMap.entrySet();
+            List<Map.Entry<String, Integer>> orderedListOfTargets = targetsSet.stream()
+                    .sorted((o1, o2) -> o2.getValue() - o1.getValue()).toList();
+            String targetName = "";
+            int percentage = 0;
+            for (Map.Entry<String, Integer> orderedListOfTarget : orderedListOfTargets) {
+                for (ArrayDeque<Entity> entities : entityDequesList) {
+                    if (entities.getFirst().getClass().getSimpleName().equalsIgnoreCase(orderedListOfTarget.getKey())) {
+                        targetName = orderedListOfTarget.getKey();
+                        percentage = orderedListOfTarget.getValue();
+                        break;
+                    }
+                }
+                if (!targetName.equals("") && percentage != 0) {
+                    int randomChance = Randomiser.getRandomCount(0, 101);
+                    if (randomChance < percentage) {
+                        removeTarget(cell, targetName);
+                        return true;
+                    }
+                    return false;
                 }
             }
+            return false;
         }
-        int randomChance = Randomiser.getRandomCount(0,101);
-        if(randomChance<percentage){
-            removeTarget(cell, targetName);
-            return true;
-        }
-        return false;
     }
 
     private void removeTarget(Cell cell, String targetName) {
-        ArrayDeque<Entity> entityDeque = cell.getResidentsInCell().get(targetName.toUpperCase());
-        Entity eatenEntity = entityDeque.remove();
-        EntityCounter.reducePopulation(TypeOfEntity.valueOf(eatenEntity.getClass().getName().toUpperCase()));
+        ArrayDeque<Entity> entityDeque = cell.getResidentsInCell().get(TypeOfEntity.valueOf(targetName.toUpperCase()));
+        Entity eatenEntity = entityDeque.poll();
+        EntityCounter.reducePopulation(TypeOfEntity.valueOf(eatenEntity.getClass().getSimpleName().toUpperCase()));
         this.addWeight(eatenEntity.getWeight());
     }
 
     private void addWeight(double eatenWeight) {
         double maxWeight = Double.parseDouble(this.getEntityLimit().getMaxWeight());
-        if(Math.abs(maxWeight-this.getWeight()-eatenWeight)<0.0001){
+        if (Math.abs(maxWeight - this.getWeight() - eatenWeight) < 0.0001) {
             this.setWeight(maxWeight);
-        } else{
-            this.setWeight(Math.min(maxWeight, this.getWeight()+eatenWeight));
+        } else {
+            this.setWeight(Math.min(maxWeight, this.getWeight() + eatenWeight));
         }
     }
 
